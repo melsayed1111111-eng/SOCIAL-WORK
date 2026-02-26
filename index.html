@@ -183,20 +183,46 @@
     }
 
     // --- إدارة المندوبين ---
+    // --- إدارة المندوبين مع منع التكرار ---
     window.addOfficial = async () => {
         const name = document.getElementById('adminName').value;
         const phone = document.getElementById('adminPhone').value;
-        const idCard = document.getElementById('adminIDCard').value;
+        const idCard = document.getElementById('adminIDCard').value; // رقم بطاقة المندوب
         const region = document.getElementById('adminRegion').value;
 
-        if(!name || !idCard) return alert("أدخل البيانات الأساسية للمندوب");
-        await addDoc(offCol, { name, phone, idCard, region });
-        alert("تمت الإضافة");
-        ['adminName','adminPhone','adminIDCard','adminRegion'].forEach(id => document.getElementById(id).value = '');
-    };
+        // 1. التحقق من إدخال البيانات الأساسية
+        if(!name || !idCard || !phone || !region) {
+            return alert("يرجى ملء كافة بيانات المندوب (الاسم، الهاتف، البطاقة، المنطقة)");
+        }
 
-    window.deleteOfficial = async (id, name) => {
-        if(confirm(`حذف المندوب ${name}؟`)) await deleteDoc(doc(db, "officials", id));
+        try {
+            // 2. التحقق من عدم تكرار رقم بطاقة المندوب في قاعدة البيانات
+            const q = query(offCol, where("idCard", "==", idCard));
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                alert("⚠️ خطأ: هذا المندوب مسجل بالفعل برقم البطاقة هذا!");
+                return; // التوقف عن الإضافة
+            }
+
+            // 3. إذا لم يكن مكرراً، يتم الإضافة
+            await addDoc(offCol, { 
+                name, 
+                phone, 
+                idCard, 
+                region,
+                createdAt: Date.now() 
+            });
+
+            alert("تمت إضافة المندوب بنجاح ✅");
+
+            // مسح الحقول بعد الإضافة
+            ['adminName','adminPhone','adminIDCard','adminRegion'].forEach(id => document.getElementById(id).value = '');
+
+        } catch (error) {
+            console.error("Error checking/adding official: ", error);
+            alert("حدث خطأ أثناء الاتصال بقاعدة البيانات");
+        }
     };
 
     onSnapshot(offCol, (snap) => {
@@ -290,3 +316,4 @@
 </body>
 
 </html>
+
