@@ -1,319 +1,508 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="https://img.icons8.com/external-flat-juicy-fish/60/external-charity-humanitarian-flat-flat-juicy-fish.png" type="image/png">
+    <link rel="icon"
+        href="https://img.icons8.com/external-flat-juicy-fish/60/external-charity-humanitarian-flat-flat-juicy-fish.png"
+        type="image/png">
     <title>نظام الجمعية الخيرية - الإصدار الشامل</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <!-- مكتبة تصدير ملفات الإكسيل -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        :root { --primary: #27ae60; --secondary: #2c3e50; --danger: #e74c3c; --accent: #3498db; --bg: #f0f2f5; }
-        body { font-family: 'Tajawal', sans-serif; background-color: var(--bg); margin: 0; padding: 0; }
-        .container { max-width: 1200px; margin: 20px auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        
-        .view { display: none; }
-        .view.active { display: block; }
+        :root {
+            --primary: #27ae60;
+            --secondary: #2c3e50;
+            --danger: #e74c3c;
+            --accent: #3498db;
+            --bg: #f0f2f5;
+        }
 
-        header { text-align: center; border-bottom: 3px solid var(--primary); margin-bottom: 25px; padding-bottom: 15px; }
-        h2 { color: var(--secondary); margin: 25px 0 15px; border-right: 5px solid var(--primary); padding-right: 10px; font-size: 18px; }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 0;
+        }
 
-        .login-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 50px; }
-        .role-card { background: white; border: 2px solid #eee; padding: 30px; border-radius: 15px; text-align: center; cursor: pointer; transition: 0.3s; }
-        .role-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
 
-        .flex-box { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; background: #f8f9fa; padding: 20px; border-radius: 10px; border: 1px solid #ddd; }
-        input, select, button, textarea { padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; font-family: 'Tajawal'; }
-        button { background: var(--primary); color: white; border: none; cursor: pointer; font-weight: bold; }
-        button:hover { opacity: 0.9; }
-        
-        .btn-logout { background: #666; margin-bottom: 20px; padding: 10px 20px; }
-        .btn-del { background: var(--danger); padding: 5px 8px; font-size: 11px; }
-        .btn-deliver { background: var(--accent); font-size: 11px; }
+        .view {
+            display: none;
+        }
 
-        .table-wrapper { overflow-x: auto; margin-top: 15px; }
-        table { width: 100%; border-collapse: collapse; background: white; font-size: 13px; min-width: 900px; }
-        th, td { padding: 10px; text-align: right; border-bottom: 1px solid #eee; }
-        th { background-color: var(--secondary); color: white; }
-        
-        .status-done { color: var(--primary); font-weight: bold; }
-        .status-pending { color: var(--danger); font-weight: bold; }
-        .badge { padding: 3px 6px; border-radius: 4px; font-size: 10px; background: #eee; }
+        .view.active {
+            display: block;
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 3px solid var(--primary);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            color: var(--secondary);
+            margin: 25px 0 15px;
+            border-right: 5px solid var(--primary);
+            padding-right: 10px;
+            font-size: 18px;
+        }
+
+        .login-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 50px;
+        }
+
+        .role-card {
+            background: white;
+            border: 2px solid #eee;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .role-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .flex-box {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        input,
+        select,
+        button,
+        textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Tajawal';
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .btn-logout {
+            background: #666;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+        }
+
+        .btn-del {
+            background: var(--danger);
+            padding: 5px 8px;
+            font-size: 11px;
+        }
+
+        .btn-deliver {
+            background: var(--accent);
+            font-size: 11px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            font-size: 13px;
+            min-width: 900px;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: right;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .status-done {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .status-pending {
+            color: var(--danger);
+            font-weight: bold;
+        }
+
+        .badge {
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            background: #eee;
+        }
     </style>
 </head>
+
 <body>
 
-<!-- 1. شاشة الدخول -->
-<div id="view-login" class="container view active">
-    <header>
-        <h1>💎 نظام إدارة وتوزيع المساعدات</h1>
-        <p>الرجاء اختيار هويتك للدخول</p>
-    </header>
-    <div class="login-grid">
-        <div class="role-card" onclick="checkAdminPass()">
-            <span>🔐</span>
-            <h3>مدير النظام (الجمعية)</h3>
+    <!-- 1. شاشة الدخول -->
+    <div id="view-login" class="container view active">
+        <header>
+            <h1>💎 نظام إدارة وتوزيع المساعدات</h1>
+            <p>الرجاء اختيار هويتك للدخول</p>
+        </header>
+        <div class="login-grid">
+            <div class="role-card" onclick="checkAdminPass()">
+                <span>🔐</span>
+                <h3>مدير النظام (الجمعية)</h3>
+            </div>
+            <div class="role-card">
+                <span>🚚</span>
+                <h3>دخول المندوبين</h3>
+                <select id="select-officer-login" onchange="enterOfficerDashboard(this.value)">
+                    <option value="">اختر اسمك للدخول...</option>
+                </select>
+            </div>
         </div>
-        <div class="role-card">
-            <span>🚚</span>
-            <h3>دخول المندوبين</h3>
-            <select id="select-officer-login" onchange="enterOfficerDashboard(this.value)">
-                <option value="">اختر اسمك للدخول...</option>
+    </div>
+
+    <!-- 2. واجهة مدير النظام -->
+    <div id="view-admin" class="container view">
+        <button class="btn-logout" onclick="showLogin()">← خروج</button>
+
+        <h2>👤 إضافة مسؤول توزيع (مندوب) جديد</h2>
+        <div class="flex-box">
+            <input type="text" id="adminName" placeholder="اسم المندوب">
+            <input type="number" id="adminPhone" placeholder="رقم الهاتف">
+            <input type="number" id="adminIDCard" placeholder="رقم البطاقة">
+            <input type="text" id="adminRegion" placeholder="المنطقة المسئول عنها">
+            <button onclick="addOfficial()">حفظ المندوب +</button>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>اسم المندوب</th>
+                        <th>الهاتف</th>
+                        <th>رقم البطاقة</th>
+                        <th>المنطقة</th>
+                        <th>إجراء</th>
+                    </tr>
+                </thead>
+                <tbody id="officialsTableBody"></tbody>
+            </table>
+        </div>
+
+        <hr>
+
+        <h2>📝 تسجيل مستفيد (محتاج) جديد</h2>
+        <div class="flex-box">
+            <input type="text" id="benName" placeholder="اسم المستفيد الرباعي">
+            <input type="number" id="benID" placeholder="الرقم القومي (14 رقم)">
+            <input type="text" id="benAddress" placeholder="العنوان بالتفصيل">
+            <input type="number" id="benPhone" placeholder="رقم الهاتف">
+            <input type="number" id="benFamily" placeholder="عدد أفراد الأسرة">
+            <select id="benSocial">
+                <option value="">الحالة الاجتماعية</option>
+                <option value="أرملة">أرملة</option>
+                <option value="مطلق">مطلق/ة</option>
+                <option value="متزوج ويعول">متزوج ويعول</option>
+                <option value="عاجز">عاجز/مرضي</option>
+                <option value="غير ذلك">غير ذلك</option>
             </select>
+            <select id="benOfficialSelect">
+                <option value="">اختر المندوب المسئول</option>
+            </select>
+            <input type="text" id="benType" placeholder="نوع المساعدة">
+            <textarea id="benDetails" placeholder="تفاصيل إضافية عن الحالة" style="grid-column: span 2;"></textarea>
+            <button onclick="addBeneficiary()" style="grid-column: span 1;">تسجيل المستفيد</button>
+        </div>
+
+        <!-- زر التصدير -->
+        <div style="text-align: left; margin-bottom: 10px;">
+            <button onclick="exportToExcel()" style="background-color: #1d6f42; color: white;">
+                📥 تصدير البيانات إلى ملف Excel
+            </button>
+        </div>
+
+        <h2>📊 كشف البيانات الشامل</h2>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>م</th>
+                        <th>الاسم</th>
+                        <th>الرقم القومي</th>
+                        <th>العنوان</th>
+                        <th>الهاتف</th>
+                        <th>الأسرة</th>
+                        <th>الحالة</th>
+                        <th>المندوب</th>
+                        <th>المساعدة</th>
+                        <th>الاستلام</th>
+                        <th>حذف</th>
+                    </tr>
+                </thead>
+                <tbody id="adminTableBody"></tbody>
+            </table>
         </div>
     </div>
-</div>
 
-<!-- 2. واجهة مدير النظام -->
-<div id="view-admin" class="container view">
-    <button class="btn-logout" onclick="showLogin()">← خروج</button>
-    
-    <h2>👤 إضافة مسؤول توزيع (مندوب) جديد</h2>
-    <div class="flex-box">
-        <input type="text" id="adminName" placeholder="اسم المندوب">
-        <input type="number" id="adminPhone" placeholder="رقم الهاتف">
-        <input type="number" id="adminIDCard" placeholder="رقم البطاقة">
-        <input type="text" id="adminRegion" placeholder="المنطقة المسئول عنها">
-        <button onclick="addOfficial()">حفظ المندوب +</button>
-    </div>
-    
-    <div class="table-wrapper">
-        <table>
-            <thead><tr><th>اسم المندوب</th><th>الهاتف</th><th>رقم البطاقة</th><th>المنطقة</th><th>إجراء</th></tr></thead>
-            <tbody id="officialsTableBody"></tbody>
-        </table>
-    </div>
+    <!-- 3. واجهة المندوب -->
+    <div id="view-officer" class="container view">
+        <button class="btn-logout" onclick="showLogin()">← تسجيل الخروج</button>
+        <header>
+            <h1 id="officer-welcome-title">مرحباً..</h1>
+            <p id="officer-region-subtitle">منطقة: ..</p>
+        </header>
 
-    <hr>
-
-    <h2>📝 تسجيل مستفيد (محتاج) جديد</h2>
-    <div class="flex-box">
-        <input type="text" id="benName" placeholder="اسم المستفيد الرباعي">
-        <input type="number" id="benID" placeholder="الرقم القومي (14 رقم)">
-        <input type="text" id="benAddress" placeholder="العنوان بالتفصيل">
-        <input type="number" id="benPhone" placeholder="رقم الهاتف">
-        <input type="number" id="benFamily" placeholder="عدد أفراد الأسرة">
-        <select id="benSocial">
-            <option value="">الحالة الاجتماعية</option>
-            <option value="أرملة">أرملة</option>
-            <option value="مطلق">مطلق/ة</option>
-            <option value="متزوج ويعول">متزوج ويعول</option>
-            <option value="عاجز">عاجز/مرضي</option>
-            <option value="غير ذلك">غير ذلك</option>
-        </select>
-        <select id="benOfficialSelect"><option value="">اختر المندوب المسئول</option></select>
-        <input type="text" id="benType" placeholder="نوع المساعدة">
-        <textarea id="benDetails" placeholder="تفاصيل إضافية عن الحالة" style="grid-column: span 2;"></textarea>
-        <button onclick="addBeneficiary()" style="grid-column: span 1;">تسجيل المستفيد</button>
+        <h2>📋 قائمة المحتاجين المخصصين لك</h2>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>م</th>
+                        <th>الاسم</th>
+                        <th>العنوان</th>
+                        <th>الهاتف</th>
+                        <th>الأسرة</th>
+                        <th>المساعدة</th>
+                        <th>تفاصيل</th>
+                        <th>الحالة</th>
+                        <th>تأكيد الاستلام</th>
+                    </tr>
+                </thead>
+                <tbody id="officerTableBody"></tbody>
+            </table>
+        </div>
     </div>
 
-    <h2>📊 كشف البيانات الشامل</h2>
-    <div class="table-wrapper">
-        <table>
-            <thead>
-                <tr>
-                    <th>م</th><th>الاسم</th><th>الرقم القومي</th><th>العنوان</th><th>الهاتف</th><th>الأسرة</th><th>الحالة</th><th>المندوب</th><th>المساعدة</th><th>الاستلام</th><th>حذف</th>
-                </tr>
-            </thead>
-            <tbody id="adminTableBody"></tbody>
-        </table>
-    </div>
-</div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, query, where, deleteDoc, doc, onSnapshot, updateDoc, orderBy }
+            from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-<!-- 3. واجهة المندوب -->
-<div id="view-officer" class="container view">
-    <button class="btn-logout" onclick="showLogin()">← تسجيل الخروج</button>
-    <header>
-        <h1 id="officer-welcome-title">مرحباً..</h1>
-        <p id="officer-region-subtitle">منطقة: ..</p>
-    </header>
-
-    <h2>📋 قائمة المحتاجين المخصصين لك</h2>
-    <div class="table-wrapper">
-        <table>
-            <thead>
-                <tr>
-                    <th>م</th><th>الاسم</th><th>العنوان</th><th>الهاتف</th><th>الأسرة</th><th>المساعدة</th><th>تفاصيل</th><th>الحالة</th><th>تأكيد الاستلام</th>
-                </tr>
-            </thead>
-            <tbody id="officerTableBody"></tbody>
-        </table>
-    </div>
-</div>
-
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, query, where, deleteDoc, doc, onSnapshot, updateDoc, orderBy } 
-    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyCC_ENWMUsZ9yrowWOKJzxKBfhmkr9YwBs",
-        authDomain: "social-work-36aa0.firebaseapp.com",
-        projectId: "social-work-36aa0",
-        storageBucket: "social-work-36aa0.firebasestorage.app",
-        messagingSenderId: "276024514062",
-        appId: "1:276024514062:web:bb0c66b4d579692c920e5f",
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const benCol = collection(db, "beneficiaries");
-    const offCol = collection(db, "officials");
-
-    // --- تسجيل الدخول ---
-    window.checkAdminPass = () => {
-        const pass = prompt("كلمة مرور المدير:");
-        if(pass === "admin1234") switchView('view-admin');
-        else alert("خطأ!");
-    };
-
-    window.showLogin = () => switchView('view-login');
-
-    window.enterOfficerDashboard = (name) => {
-        if(!name) return;
-        const opt = document.querySelector(`#select-officer-login option[value="${name}"]`);
-        document.getElementById('officer-welcome-title').innerText = `المندوب: ${name}`;
-        document.getElementById('officer-region-subtitle').innerText = `منطقة: ${opt.dataset.region}`;
-        loadOfficerData(name);
-        switchView('view-officer');
-    };
-
-    function switchView(id) {
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-    }
-
-    // --- إدارة المندوبين ---
-    // --- إدارة المندوبين مع منع التكرار ---
-    window.addOfficial = async () => {
-        const name = document.getElementById('adminName').value;
-        const phone = document.getElementById('adminPhone').value;
-        const idCard = document.getElementById('adminIDCard').value; // رقم بطاقة المندوب
-        const region = document.getElementById('adminRegion').value;
-
-        // 1. التحقق من إدخال البيانات الأساسية
-        if(!name || !idCard || !phone || !region) {
-            return alert("يرجى ملء كافة بيانات المندوب (الاسم، الهاتف، البطاقة، المنطقة)");
-        }
-
-        try {
-            // 2. التحقق من عدم تكرار رقم بطاقة المندوب في قاعدة البيانات
-            const q = query(offCol, where("idCard", "==", idCard));
-            const querySnapshot = await getDocs(q);
-
-            if (!querySnapshot.empty) {
-                alert("⚠️ خطأ: هذا المندوب مسجل بالفعل برقم البطاقة هذا!");
-                return; // التوقف عن الإضافة
-            }
-
-            // 3. إذا لم يكن مكرراً، يتم الإضافة
-            await addDoc(offCol, { 
-                name, 
-                phone, 
-                idCard, 
-                region,
-                createdAt: Date.now() 
-            });
-
-            alert("تمت إضافة المندوب بنجاح ✅");
-
-            // مسح الحقول بعد الإضافة
-            ['adminName','adminPhone','adminIDCard','adminRegion'].forEach(id => document.getElementById(id).value = '');
-
-        } catch (error) {
-            console.error("Error checking/adding official: ", error);
-            alert("حدث خطأ أثناء الاتصال بقاعدة البيانات");
-        }
-    };
-
-    onSnapshot(offCol, (snap) => {
-        const table = document.getElementById('officialsTableBody');
-        const loginSel = document.getElementById('select-officer-login');
-        const adminSel = document.getElementById('benOfficialSelect');
-        table.innerHTML = '';
-        loginSel.innerHTML = '<option value="">اختر اسمك للدخول...</option>';
-        adminSel.innerHTML = '<option value="">اختر المندوب المسئول</option>';
-
-        snap.forEach(d => {
-            const o = d.data();
-            table.innerHTML += `<tr><td>${o.name}</td><td>${o.phone}</td><td>${o.idCard}</td><td>${o.region}</td><td><button class="btn-del" onclick="deleteOfficial('${d.id}','${o.name}')">حذف</button></td></tr>`;
-            const opt = `<option value="${o.name}" data-region="${o.region}">${o.name}</option>`;
-            loginSel.innerHTML += opt;
-            adminSel.innerHTML += opt;
-        });
-    });
-
-    // --- إدارة المستفيدين ---
-    window.addBeneficiary = async () => {
-        const data = {
-            name: document.getElementById('benName').value,
-            idCard: document.getElementById('benID').value,
-            address: document.getElementById('benAddress').value,
-            phone: document.getElementById('benPhone').value,
-            familyCount: document.getElementById('benFamily').value,
-            socialStatus: document.getElementById('benSocial').value,
-            official: document.getElementById('benOfficialSelect').value,
-            type: document.getElementById('benType').value,
-            details: document.getElementById('benDetails').value,
-            region: document.getElementById('benOfficialSelect').options[document.getElementById('benOfficialSelect').selectedIndex].dataset.region,
-            status: 'pending',
-            timestamp: Date.now()
+        const firebaseConfig = {
+            apiKey: "AIzaSyCC_ENWMUsZ9yrowWOKJzxKBfhmkr9YwBs",
+            authDomain: "social-work-36aa0.firebaseapp.com",
+            projectId: "social-work-36aa0",
+            storageBucket: "social-work-36aa0.firebasestorage.app",
+            messagingSenderId: "276024514062",
+            appId: "1:276024514062:web:bb0c66b4d579692c920e5f",
         };
 
-        if(!data.name || !data.idCard || !data.official) return alert("أكمل الاسم، الرقم القومي، والمندوب");
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const benCol = collection(db, "beneficiaries");
+        const offCol = collection(db, "officials");
 
-        const q = query(benCol, where("idCard", "==", data.idCard));
-        const check = await getDocs(q);
-        if(!check.empty) return alert("⚠️ تكرار! هذا الرقم القومي مسجل بالفعل!");
+        // --- تسجيل الدخول ---
+        window.checkAdminPass = () => {
+            const pass = prompt("كلمة مرور المدير:");
+            if (pass === "admin1234") switchView('view-admin');
+            else alert("خطأ!");
+        };
 
-        await addDoc(benCol, data);
-        alert("تم تسجيل المحتاج بنجاح ✅");
-        ['benName','benID','benAddress','benPhone','benFamily','benType','benDetails'].forEach(id => document.getElementById(id).value = '');
-    };
+        window.showLogin = () => switchView('view-login');
 
-    onSnapshot(query(benCol, orderBy("timestamp", "desc")), (snap) => {
-        const tbody = document.getElementById('adminTableBody');
-        tbody.innerHTML = '';
-        let i = 1;
-        snap.forEach(d => {
-            const b = d.data();
-            tbody.innerHTML += `<tr>
-                <td>${i++}</td><td>${b.name}</td><td>${b.idCard}</td><td>${b.address}</td><td>${b.phone}</td><td>${b.familyCount}</td><td>${b.socialStatus}</td>
-                <td>${b.official}</td><td>${b.type}</td>
-                <td class="${b.status=='done'?'status-done':'status-pending'}">${b.status=='done'?'استلم ✅':'انتظار ⏳'}</td>
-                <td><button onclick="deleteBen('${d.id}')" class="btn-del">حذف</button></td>
-            </tr>`;
+        window.enterOfficerDashboard = (name) => {
+            if (!name) return;
+            const opt = document.querySelector(`#select-officer-login option[value="${name}"]`);
+            document.getElementById('officer-welcome-title').innerText = `المندوب: ${name}`;
+            document.getElementById('officer-region-subtitle').innerText = `منطقة: ${opt.dataset.region}`;
+            loadOfficerData(name);
+            switchView('view-officer');
+        };
+
+        function switchView(id) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        // --- إدارة المندوبين ---
+        // --- إدارة المندوبين مع منع التكرار ---
+        window.addOfficial = async () => {
+            const name = document.getElementById('adminName').value;
+            const phone = document.getElementById('adminPhone').value;
+            const idCard = document.getElementById('adminIDCard').value; // رقم بطاقة المندوب
+            const region = document.getElementById('adminRegion').value;
+
+            // 1. التحقق من إدخال البيانات الأساسية
+            if (!name || !idCard || !phone || !region) {
+                return alert("يرجى ملء كافة بيانات المندوب (الاسم، الهاتف، البطاقة، المنطقة)");
+            }
+
+            try {
+                // 2. التحقق من عدم تكرار رقم بطاقة المندوب في قاعدة البيانات
+                const q = query(offCol, where("idCard", "==", idCard));
+                const querySnapshot = await getDocs(q);
+
+                if (!querySnapshot.empty) {
+                    alert("⚠️ خطأ: هذا المندوب مسجل بالفعل برقم البطاقة هذا!");
+                    return; // التوقف عن الإضافة
+                }
+
+                // 3. إذا لم يكن مكرراً، يتم الإضافة
+                await addDoc(offCol, {
+                    name,
+                    phone,
+                    idCard,
+                    region,
+                    createdAt: Date.now()
+                });
+
+                alert("تمت إضافة المندوب بنجاح ✅");
+
+                // مسح الحقول بعد الإضافة
+                ['adminName', 'adminPhone', 'adminIDCard', 'adminRegion'].forEach(id => document.getElementById(id).value = '');
+
+            } catch (error) {
+                console.error("Error checking/adding official: ", error);
+                alert("حدث خطأ أثناء الاتصال بقاعدة البيانات");
+            }
+        };
+
+        window.deleteOfficial = async (id, name) => {
+            if (confirm(`حذف المندوب ${name}؟`)) await deleteDoc(doc(db, "officials", id));
+        };
+
+        onSnapshot(offCol, (snap) => {
+            const table = document.getElementById('officialsTableBody');
+            const loginSel = document.getElementById('select-officer-login');
+            const adminSel = document.getElementById('benOfficialSelect');
+            table.innerHTML = '';
+            loginSel.innerHTML = '<option value="">اختر اسمك للدخول...</option>';
+            adminSel.innerHTML = '<option value="">اختر المندوب المسئول</option>';
+
+            snap.forEach(d => {
+                const o = d.data();
+                table.innerHTML += `<tr><td>${o.name}</td><td>${o.phone}</td><td>${o.idCard}</td><td>${o.region}</td><td><button class="btn-del" onclick="deleteOfficial('${d.id}','${o.name}')">حذف</button></td></tr>`;
+                const opt = `<option value="${o.name}" data-region="${o.region}">${o.name}</option>`;
+                loginSel.innerHTML += opt;
+                adminSel.innerHTML += opt;
+            });
         });
-    });
 
-    // --- واجهة المندوب ---
-    function loadOfficerData(offName) {
-        const q = query(benCol, where("official", "==", offName));
-        onSnapshot(q, (snap) => {
-            const tbody = document.getElementById('officerTableBody');
+        // --- إدارة المستفيدين ---
+        window.addBeneficiary = async () => {
+            const data = {
+                name: document.getElementById('benName').value,
+                idCard: document.getElementById('benID').value,
+                address: document.getElementById('benAddress').value,
+                phone: document.getElementById('benPhone').value,
+                familyCount: document.getElementById('benFamily').value,
+                socialStatus: document.getElementById('benSocial').value,
+                official: document.getElementById('benOfficialSelect').value,
+                type: document.getElementById('benType').value,
+                details: document.getElementById('benDetails').value,
+                region: document.getElementById('benOfficialSelect').options[document.getElementById('benOfficialSelect').selectedIndex].dataset.region,
+                status: 'pending',
+                timestamp: Date.now()
+            };
+
+            if (!data.name || !data.idCard || !data.official) return alert("أكمل الاسم، الرقم القومي، والمندوب");
+
+            const q = query(benCol, where("idCard", "==", data.idCard));
+            const check = await getDocs(q);
+            if (!check.empty) return alert("⚠️ تكرار! هذا الرقم القومي مسجل بالفعل!");
+
+            await addDoc(benCol, data);
+            alert("تم تسجيل المحتاج بنجاح ✅");
+            ['benName', 'benID', 'benAddress', 'benPhone', 'benFamily', 'benType', 'benDetails'].forEach(id => document.getElementById(id).value = '');
+        };
+
+        onSnapshot(query(benCol, orderBy("timestamp", "desc")), (snap) => {
+            const tbody = document.getElementById('adminTableBody');
             tbody.innerHTML = '';
             let i = 1;
             snap.forEach(d => {
                 const b = d.data();
-                const isDone = b.status == 'done';
                 tbody.innerHTML += `<tr>
-                    <td>${i++}</td><td><b>${b.name}</b></td><td>${b.address}</td><td>${b.phone}</td><td>${b.familyCount}</td><td>${b.type}</td><td>${b.details}</td>
-                    <td class="${isDone?'status-done':'status-pending'}">${isDone?'تم التسليم':'قيد الانتظار'}</td>
-                    <td>${!isDone ? `<button class="btn-deliver" onclick="markDelivered('${d.id}')">تأكيد الاستلام</button>` : 'تم'}</td>
-                </tr>`;
+                <td>${i++}</td><td>${b.name}</td><td>${b.idCard}</td><td>${b.address}</td><td>${b.phone}</td><td>${b.familyCount}</td><td>${b.socialStatus}</td>
+                <td>${b.official}</td><td>${b.type}</td>
+                <td class="${b.status == 'done' ? 'status-done' : 'status-pending'}">${b.status == 'done' ? 'استلم ✅' : 'انتظار ⏳'}</td>
+                <td><button onclick="deleteBen('${d.id}')" class="btn-del">حذف</button></td>
+            </tr>`;
             });
         });
-    }
 
-    window.markDelivered = async (id) => {
-        if(confirm("تأكيد التسليم؟")) await updateDoc(doc(db, "beneficiaries", id), { status: 'done' });
-    };
+        // --- واجهة المندوب ---
+        function loadOfficerData(offName) {
+            const q = query(benCol, where("official", "==", offName));
+            onSnapshot(q, (snap) => {
+                const tbody = document.getElementById('officerTableBody');
+                tbody.innerHTML = '';
+                let i = 1;
+                snap.forEach(d => {
+                    const b = d.data();
+                    const isDone = b.status == 'done';
+                    tbody.innerHTML += `<tr>
+                    <td>${i++}</td><td><b>${b.name}</b></td><td>${b.address}</td><td>${b.phone}</td><td>${b.familyCount}</td><td>${b.type}</td><td>${b.details}</td>
+                    <td class="${isDone ? 'status-done' : 'status-pending'}">${isDone ? 'تم التسليم' : 'قيد الانتظار'}</td>
+                    <td>${!isDone ? `<button class="btn-deliver" onclick="markDelivered('${d.id}')">تأكيد الاستلام</button>` : 'تم'}</td>
+                </tr>`;
+                });
+            });
+        }
 
-    window.deleteBen = async (id) => {
-        if(confirm("حذف السجل؟")) await deleteDoc(doc(db, "beneficiaries", id));
-    };
+        window.markDelivered = async (id) => {
+            if (confirm("تأكيد التسليم؟")) await updateDoc(doc(db, "beneficiaries", id), { status: 'done' });
+        };
 
-</script>
+        window.deleteBen = async (id) => {
+            if (confirm("حذف السجل؟")) await deleteDoc(doc(db, "beneficiaries", id));
+        };
+
+        // وظيفة تحويل الجدول إلى ملف إكسيل وتحميله
+        window.exportToExcel = () => {
+            // 1. تحديد الجدول الذي نريد تصديره
+            const table = document.getElementById("adminTableBody").parentElement;
+
+            // 2. تحويل الجدول إلى "كتاب عمل" (Workbook)
+            const wb = XLSX.utils.table_to_book(table, { sheet: "بيانات المستفيدين" });
+
+            // 3. الحصول على التاريخ الحالي لتسمية الملف بشكل احترافي
+            const date = new Date().toLocaleDateString('ar-EG').replace(/\//g, '-');
+            const fileName = `تقرير_الجمعية_الخيرية_${date}.xlsx`;
+
+            // 4. تحميل الملف للمستخدم
+            XLSX.writeFile(wb, fileName);
+        };
+
+    </script>
 </body>
 
 </html>
-
