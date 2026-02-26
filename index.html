@@ -232,6 +232,7 @@
         <div class="flex-box">
             <input type="text" id="benName" placeholder="اسم المستفيد الرباعي">
             <input type="number" id="benID" placeholder="الرقم القومي (14 رقم)">
+            <input type="number" id="benFamilyID" placeholder="رقم بطاقة التموين (كود الأسرة الموحد)">
             <input type="text" id="benAddress" placeholder="العنوان بالتفصيل">
             <input type="number" id="benPhone" placeholder="رقم الهاتف">
             <input type="number" id="benFamily" placeholder="عدد أفراد الأسرة">
@@ -418,14 +419,20 @@
 
         // --- إدارة المستفيدين ---
         window.addBeneficiary = async () => {
+            const idCard = document.getElementById('benID').value; // الرقم القومي للفرد
+            const familyID = document.getElementById('benFamilyID').value; // كود الأسرة/التموين
+            const official = document.getElementById('benOfficialSelect').value;
+
+            // بيانات المستفيد
             const data = {
                 name: document.getElementById('benName').value,
-                idCard: document.getElementById('benID').value,
+                idCard: idCard,
+                familyID: familyID, // كود الأسرة الجديد
                 address: document.getElementById('benAddress').value,
                 phone: document.getElementById('benPhone').value,
                 familyCount: document.getElementById('benFamily').value,
                 socialStatus: document.getElementById('benSocial').value,
-                official: document.getElementById('benOfficialSelect').value,
+                official: official,
                 type: document.getElementById('benType').value,
                 details: document.getElementById('benDetails').value,
                 region: document.getElementById('benOfficialSelect').options[document.getElementById('benOfficialSelect').selectedIndex].dataset.region,
@@ -433,15 +440,40 @@
                 timestamp: Date.now()
             };
 
-            if (!data.name || !data.idCard || !data.official) return alert("أكمل الاسم، الرقم القومي، والمندوب");
+            if (!data.name || !idCard || !familyID || !official) {
+                return alert("خطأ: يجب إدخال اسم المستفيد، الرقم القومي، ورقم بطاقة التموين (كود الأسرة)");
+            }
 
-            const q = query(benCol, where("idCard", "==", data.idCard));
-            const check = await getDocs(q);
-            if (!check.empty) return alert("⚠️ تكرار! هذا الرقم القومي مسجل بالفعل!");
+            try {
+                // 1. التحقق من الرقم القومي (منع تكرار نفس الشخص)
+                const q1 = query(benCol, where("idCard", "==", idCard));
+                const checkPerson = await getDocs(q1);
 
-            await addDoc(benCol, data);
-            alert("تم تسجيل المحتاج بنجاح ✅");
-            ['benName', 'benID', 'benAddress', 'benPhone', 'benFamily', 'benType', 'benDetails'].forEach(id => document.getElementById(id).value = '');
+                // 2. التحقق من رقم بطاقة التموين (منع تكرار أي فرد من نفس الأسرة)
+                const q2 = query(benCol, where("familyID", "==", familyID));
+                const checkFamily = await getDocs(q2);
+
+                if (!checkPerson.empty) {
+                    alert("⚠️ هذا الشخص مسجل مسبقاً في النظام!");
+                    return;
+                }
+
+                if (!checkFamily.empty) {
+                    alert("⚠️ عذراً: هذه الأسرة مسجلة مسبقاً (تم الصرف لزوج/زوجة أو فرد آخر من نفس العائلة بنفس كود الأسرة)!");
+                    return;
+                }
+
+                // إذا كان الفرد والأسرة غير مسجلين، يتم الحفظ
+                await addDoc(benCol, data);
+                alert("تم تسجيل الأسرة بنجاح ✅");
+
+                // مسح الحقول
+                ['benName', 'benID', 'benFamilyID', 'benAddress', 'benPhone', 'benFamily', 'benType', 'benDetails'].forEach(id => document.getElementById(id).value = '');
+
+            } catch (e) {
+                console.error(e);
+                alert("حدث خطأ أثناء الفحص!");
+            }
         };
 
         onSnapshot(query(benCol, orderBy("timestamp", "desc")), (snap) => {
